@@ -9,6 +9,7 @@ var app = express();
 
 app.use(bodyParser.json());
 
+// Add Todo
 app.post('/todos', (req, res) => {
   var todo = new Todo({
     text: req.body.text,
@@ -17,6 +18,15 @@ app.post('/todos', (req, res) => {
 
   todo.save().then((doc) => {
     res.send(doc);
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
+
+// List all Todos
+app.get('/todos', (req, res) => {
+  Todo.find().then((todos) => {
+    res.send({todos});
   }, (e) => {
     res.status(400).send(e);
   });
