@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 
 var {mongoose} = require('./db/mongoose');
+var {ObjectID} = require('mongodb');
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 
@@ -29,6 +30,25 @@ app.get('/todos', (req, res) => {
     res.send({todos});
   }, (e) => {
     res.status(400).send(e);
+  });
+});
+
+// Get Specifit Todo
+app.get('/todos/:id', (req, res) => {
+  var todoId = req.params.id;
+  console.log('TODOID: ', todoId);
+
+  if(!ObjectID.isValid(todoId)) {
+    return res.status(404).send();
+  }
+  Todo.findById(todoId).then((todo) => {
+    if(!todo) {
+      return res.status(404).send();
+    }
+
+    res.send({todo});
+  }).catch((e) => {
+    res.status(400).send();
   });
 });
 
