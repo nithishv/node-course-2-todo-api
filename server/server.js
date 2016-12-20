@@ -1,8 +1,10 @@
+require('./config/config');
+
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 
 var {mongoose} = require('./db/mongoose');
 var {Todo} = require('./models/todo');
@@ -90,7 +92,7 @@ app.patch('/todos/:id', (req, res) => {
 
   Todo.findByIdAndUpdate(todoId, {$set: body}, {new: true}).then((todo) => {
     if(!todo) {
-      return res.status(404).send();
+      return res.status(404).send('NO TOOD');
     }
     res.send({todo});
   }).catch((e) => {

@@ -179,4 +179,11 @@ describe('PATCH /todos/:id', () => {
       })
       .end(done);
   });
-})
+
+  it('should return 404 if object id is not valid', (done) => {
+    request(app)
+      .patch('/todos/123')
+      .expect(404)
+      .end(done)
+  });
+});
