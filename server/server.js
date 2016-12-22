@@ -40,6 +40,31 @@ app.get('/todos', authenticate, (req, res) => {
   });
 });
 
+// List only completed Todos for user
+app.get('/todos/completed', authenticate, (req, res) => {
+  Todo.find({
+      completed: true,
+    _creator: req.user._id
+  }).then((todos) => {
+    res.send({todos});
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
+
+// List only incomplete Todos for user
+app.get('/todos/incomplete', authenticate, (req, res) => {
+  Todo.find({
+      completed: false,
+    _creator: req.user._id
+  }).then((todos) => {
+    res.send({todos});
+  }, (e) => {
+    res.status(400).send(e);
+  });
+});
+
+
 // Get Specifit Todo
 app.get('/todos/:id', authenticate, (req, res) => {
   var todoId = req.params.id;
